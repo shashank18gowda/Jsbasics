@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
-const validator = require("../authentication/emailAuth");
+var validator = require('validator');
+
 const getSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -8,25 +9,36 @@ const getSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        validate: {
-            validator: function (value) {
-                try {
-                    return validator.isEmail(value);
-                } catch (error) {
-                    return res.send("invalid email")
-                }
-            }
-        }
+        unique: true
     },
 
-    regNo: {
+    phone: {
         type: Number,
+        unique: true,
         require: true
     },
-    mat_stat: {
-        type: Boolean,
-        require: true,
-        default: false
+    stat:{
+    type: Boolean,
+    default: true
     }
-})
+
+   
+});
+// getSchema.statics.isThisEmailInUse = async function(email){
+//   if(!email) new Error('invalid')
+//   try{
+//     const user =  await this.findOne({email})
+// if(user) return false
+// return true;
+
+// }catch(error){
+//     console.log("error in isThisEmailInUse"+error.message)
+//     return false
+// }
+// }
+
 module.exports = mongoose.model('getUser', getSchema)
+
+
+
+

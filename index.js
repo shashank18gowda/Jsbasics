@@ -1,34 +1,43 @@
-const express = require ("express")
-const mongoose = require("mongoose")
-const path = require("path")
-const bodyParser = require('body-parser')
-const url = 'mongodb://0.0.0.0/crud_operation'
-const app = express()
-app.use(express.json())
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+    const express = require ("express")
+    const bodyParser = require('body-parser')
 
-const port = 8008
-mongoose.connect(url, {
-    useNewUrlParser:true
+    var app = express();
+    const mongoDb = require('./models/mongoose')
+    const del = require('./routers/delete');
+    const get = require('./routers/get');
+    const put = require('./routers/put');
+    const post = require('./routers/post');
+  const getImg = require('./routers/getImg');
+   const postImg = require('./routers/postImg');
 
-})
-const con = mongoose.connection
-con.on('open',function(){
-    console.log("connected to mongodb")
-})
+    const port = 8008
 
 
-const router_2 = require('../task2crud/routers/route')
-app.use('/route',router_2)
+    app.use(express.json())
+
+    app.use(bodyParser.json())
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.listen(8008,()=>{
+        console.log("connected to port", port)
+    })
+
+  
+    
+    app.use('/delete',del)
+    app.use('/get',get)
+    app.use('/put',put)
+    app.use('/post',post)
+    app.use('/upload',postImg)
+    app.use('/retrive',getImg)
+
+    
+  
+    
 
 
 
-app.listen(8008,()=>{
-    console.log("connected to port", port)
-})
 
 
-
- 
+    

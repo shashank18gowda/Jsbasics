@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-var validator = require('validator');
+
 
 const getSchema = new mongoose.Schema({
     name: {
@@ -7,7 +7,7 @@ const getSchema = new mongoose.Schema({
         required: true
     },
     email: {
-        type: String,
+        type: String ,     
         required: true,
         unique: true
     },

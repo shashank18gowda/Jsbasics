@@ -1,11 +1,12 @@
 const express = require("express")
 const router = express.Router()
 var validator = require('validator');
+const validateToken = require("../middleware/validateTokenHandler");
 
 
 const schema = require("../models/schema")
-
-router.post('/', async (req, res) => {
+//@access private
+router.post("/", validateToken, async (req, res) => {
     try {
         const { name, email, phone } = req.body;
         const existingEntryEmail = await schema.findOne({ email: email });
@@ -22,9 +23,11 @@ router.post('/', async (req, res) => {
 
 
         const data = new schema({
+            user_id:req.user.id,
             name: name,
             email: email,
             phone: phone
+       
         })
      
         const val = validator.isEmail(req.body.email);    
@@ -70,8 +73,6 @@ if (existingEntryphone) {
 if (!ph == true) {
     return res.send('Please provide an appropriate phone number')
 }
-
-
 
 await data.save()
 return res.send("data inserted ")

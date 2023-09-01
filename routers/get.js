@@ -1,34 +1,43 @@
 const express = require("express")
 const router = express.Router()
-
+const validateToken = require("../middleware/validateTokenHandler");
 const Image = require('../models/imagemodel');
 
 
 const schema = require("../models/schema")
-
-router.get('/', async (req, res) => {
+// @access private
+router.get("/", validateToken, async (req, res) => {
     try {
-        const { name, email, phone, stat } = req.body;
-        const check = await schema.find({ stat: 1 })
-        res.json(check)
+        const check = await schema.find({ user_id: req.user.id });
+
+        const filteredItems = check.filter(item => item.stat === true);
+
+        if (filteredItems.length === 0) {
+            return res.send("No items found");
+        }
+
+        res.json(filteredItems);
     } catch (err) {
-        res.send("Error" + err.stack)
+        res.status(500).send("Error: " + err);
     }
+});
 
-})
-//get by id operation
-router.get('/:id', async (req, res) => {
+// @access private
+router.get("/:id", validateToken, async (req, res) => {
     try {
-
-        const check = await schema.findOne({ _id: req.params.id, stat: true });
+        const check = await schema.findOne({
+            _id: req.params.id,
+            user_id: req.user.id,
+            stat: true,
+        });
 
         if (!check) {
-            return res.send("User does not exist or has been deleted");
+            return res.send("Entry not found or doesn't belong to the user");
         }
 
         res.json(check);
     } catch (err) {
-        res.send("Error: " + err);
+        res.status(500).send("Error: " + err);
     }
 });
 module.exports = router

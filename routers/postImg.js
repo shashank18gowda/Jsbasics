@@ -8,13 +8,10 @@ const upload = require('../middleware/upload');
 
 
 
-
 router.post('/images', upload.array('image',25), async (req, res) => {
 
 	try {
-		
 		const uploadedImages = req.files;
-	
 		
 		if(uploadedImages.length > 20 ){
 			return res.send("limit exceeded Only 20 images at a time ");
@@ -24,7 +21,6 @@ router.post('/images', upload.array('image',25), async (req, res) => {
 		}
 	//const baseurl = `http:/retrive/images/`
 		const imagePromises = uploadedImages.map(async (file) => {
-
 			const { filename, originalname } = file;
 			// const url = baseurl + filename;
 			const image = new Image({
@@ -35,15 +31,21 @@ router.post('/images', upload.array('image',25), async (req, res) => {
 			await image.save();	
 		});
 
-		
 		await Promise.all(imagePromises);
 		return res.send('Image uploaded successfully');
 
 	} catch (error) {
 		return res.send('Provide a Image to upload '+ error.stack);
-
 	}
 });
+
+// router.post("/awsUpload", async(req,res)=>{
+//     const result = await uploadFile();
+//     console.log(result);
+//     res.send(result);
+//   });
+
+
 
 router.use((err, req, res, next) => {
 	if (err instanceof multer.MulterError) {

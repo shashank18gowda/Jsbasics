@@ -146,3 +146,46 @@
 //     res.send('Image upload failed: ' + error.stack);
 //   }
 // });
+router.put("/:id", validateToken, async (req, res) => {
+    try {
+        const { name, email, phone } = req.body;
+        const itemId = req.params.id;
+
+        // Check if the item with the specified ID exists and belongs to the authenticated user
+        const itemToUpdate = await schema.findOne({ _id: itemId, user_id: req.user.id, stat: true });
+
+        if (!itemToUpdate) {
+            return res.send("Item not found or you are not permitted to update this details.");
+        }
+
+        // Define the fields to update based on the request body
+        const updateUserList = {};
+
+        if (req.body.name) {
+            updateUserList.name = req.body.name;
+        }
+
+        if (req.body.email) {
+            updateUserList.email = req.body.email;
+        }
+
+        if (req.body.phone) {
+            updateUserList.phone = req.body.phone;
+        }
+
+        // Update the item only if the user has permission
+        const updatedItem = await schema.findOneAndUpdate(
+            { _id: itemId, user_id: req.user.id, stat: true },
+            updateUserList,
+            { new: true }
+        );
+
+        if (!updatedItem) {
+            return res.send("Item not found");
+        }
+
+        return res.send("Data updated successfully.");
+    } catch (err) {
+        return res.status(500).send("Error: " + err);
+    }
+});

@@ -11,11 +11,7 @@ router.get('/images/:filename', async (req, res) => {
 //const imgDest = `../retrive/images/${filename}`
       const image = await Image.findOne({filename});
 
-   
-
-
-
-      if (!image) {
+         if (!image) {
         return res.status(404).json({ error: 'Image not found' });
       }
   

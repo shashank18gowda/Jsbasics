@@ -123,7 +123,7 @@ const createCharges = async (req, res) => {
             currency: 'INR',
             card: req.body.card_id,
             customer: req.body.customer_id,
-            
+            payment_method:'pm_card_visa',
            confirm: true,
             return_url: "http://localhost:3003/success",
             automatic_payment_methods: {

@@ -8,7 +8,7 @@ let connection = null;
 const getConnection = async () => {
   if (!connection) {
     connection = new Sequelize({
-      database: "crudflutter",
+      database: "crudflutterfood",
       host: "localhost",
       username: "jithesh",
       password: "jithesh@123",
@@ -26,4 +26,4 @@ const getConnection = async () => {
   return connection;
 };
 
-module.exports = { getConnection };
+module.exports = { getConnection,sequelize: connection};

@@ -9,12 +9,15 @@ const sequelize = require("./config/dbConfig")
 // const multer = require("multer")
 const { send } = require("./config/responseHelper")
 const { RESPONSE } = require("./config/global")
+const multer = require("multer")
 
 
 
-app.use(express.json())
-app.use(bodyParser.json())
+app.use(express.json());
+// app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
+
 
 sequelize
     .getConnection()
@@ -28,7 +31,18 @@ sequelize
 
 
 // app.use('/users', require("./routers/userRoute"))
-app.use('/cust', require("./routes/CustRouter"))
+app.use('/Food', require("./routes/routers/foodRouter"))
+app.use('/Admin', require("./routes/routers/AdminRoute"))
+app.use('/User', require("./routes/routers/UserRoute"))
+
+app.use((err, req, res, next) => {
+	if (err instanceof multer.MulterError) {
+        console.log(err.message);
+		return send(res,RESPONSE.ERROR,"file is too large");
+	}
+	next(err);
+});
+
 
 app.listen(PORT, () => {
     console.log(`connected to port`, PORT)

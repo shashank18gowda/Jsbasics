@@ -1,64 +1,38 @@
-const { RESPONSE } = require("../../config/global");
 
-const { send } = require("../../config/responseHelper");
-const { initUserModel } = require("../../model/userModel");
+
 const { initAddressModel } = require("../../model/addressModel");
+const { initUserModel } = require("../../model/userModel");
 
-// @access private
-const getuser = async (req, res) => {
-    try {
-        const userAd = await initAddressModel();
-        const user = await initUserModel();
-        const user_id = req.token.user.id;
-        console.log(req.token.user.id);
+const getUser = async (req, res) => {
+  try {
+    const address = await initAddressModel();
+    const user = await initUserModel();
+    const user_id = req.token.user.id;
+console.log(user_id);
 
-
-        // let check = await user.findOne({ where: { user_id: user_id }, });
-        // let userAddress = await userAd.findOne({ where: { user_id:user_id }, });
-        // if (!check && !userAddress) {
-        //     return send(res, RESPONSE.ERROR, "user not found ")
-        // } else if (check && !userAddress) {
-        //     return send(res, RESPONSE.ERROR, "user  found adressNotFound ")
-        // } else
-        //     return send(res, RESPONSE.SUCCESS, "both found")
-
-        let data = await userAd.findAll({
-            include: [{
-             //   model: userAd.user,
-             model: user,   
-             as: "addressInfo",
-          //   attributes: ["id", "username", "email", "phNumber"],
-            },],
-          //  attributes: ["address_id", "address"],
-            // where: { user_id: req.token.user.id },
-           
-        })
-
-        const responseData = data.map((item) => ({
-            
-            username: item.addressInfo.username,
-            email: item.addressInfo.email,
-            phNumber: item.addressInfo.phNumber,
-            address: item.address,
-           
-          }));
-
-        return send(res, RESPONSE.SUCCESS, responseData)
-    }
-
-    catch (err) {
-        console.log(err.stack);
-        return send(res, RESPONSE.ERROR, err.message)
-    }
+   const data = await user.findAll({
+      include: [{
+        model: address,
+        as: "addressInfo",
+      }],
+      where: { id: user_id },
+    })
+    const formattedData = data.map((user) => ({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        address: user.addressInfo.map((address) => ({
+          id: address.id,
+          address: address.address,
+        })),
+      }));
+  
+    return res.status(200).send(formattedData);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).send(err.stack);
+  }
 };
 
-
-
-
-module.exports = { getuser }
-
-
-
-
-
+module.exports = {getUser};
 

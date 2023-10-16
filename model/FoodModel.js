@@ -38,10 +38,10 @@ const foodModel = {
   imageKey: {
     type: DataTypes.STRING,
   },
-  // wishListFlag: {
-  //   type: DataTypes.INTEGER,
-  //   defaultValue: 0,
-  // },
+  F_price: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
 };
 
 const initFoodModel = async () => {

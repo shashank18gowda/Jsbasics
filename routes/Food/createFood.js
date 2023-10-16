@@ -7,7 +7,6 @@ const { RESPONSE } = require("../../config/global");
 const { initFoodModel } = require("../../model/FoodModel");
 const moment = require("moment");
 const { initAdminModel } = require("../../model/AdminModel");
-//const { initWishlistModel } = require("../../model/wishListModel");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -18,10 +17,9 @@ const createFood = async (req, res) => {
         const Food = await initFoodModel();
         const Admin = await initAdminModel();
         const files = req.files;
-        const { F_name, description, ingredients, category, cookTime } = req.body;
+        const { F_name, description, ingredients, category, cookTime ,F_price} = req.body;
         const existingEntryF_name = await Food.findOne({ where: { F_name: F_name } });
         const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-       
        
         if (allowedMimeTypes.includes(files.mimetype)) {
             return send(res, RESPONSE.ERROR, "invalid file");
@@ -34,7 +32,9 @@ const createFood = async (req, res) => {
         if (!F_name) {
             return send(res, RESPONSE.F_NAME);
         }
-
+        if (!F_price) {
+            return send(res, RESPONSE.ERROR,"price required");
+        }
         if (!ingredients) {
             return send(res, RESPONSE.INGREDIENT);
         }
@@ -65,6 +65,7 @@ const createFood = async (req, res) => {
                 ingredients: [ingredients],
                 cookTime: cookTime,
                 imageKey: imageKey,
+                F_price:F_price,
                 admin_id: req.token.Admin.id
             });
         }

@@ -1,30 +1,31 @@
 const { DataTypes } = require("sequelize");
 const { getConnection } = require("../config/dbConfig");
+const  {initUserModel}  = require("../model/userModel");
 
-const { initUserModel } = require("./userModel");
+
 
 const addressModel = {
-  address_id: {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
   address: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+    type:DataTypes.STRING,
   },
 
 };
-
-const initAddressModel = async () => {
+let address  = null;
+const initAddressModel = async (res) => {
   try {
+    if (address) return address;
     const sequelize = await getConnection();
-
-    const address = sequelize.define("address", addressModel, {
+  
+    address = sequelize.define("address", addressModel, {
       freezeTableName: true,
     });
-    const User = await initUserModel();
-
-    address.belongsTo(User, {
+    const user = await initUserModel();
+   user.hasMany(address, {
       as: "addressInfo",
       onDelete: "cascade",
       foreignKey: {
@@ -34,11 +35,13 @@ const initAddressModel = async () => {
       targetKey: "id",
     });
 
-    await address.sync({ alter: true });
+     await address.sync({ alter: true });
     return address;
   } catch (err) {
-    console.log(err.stack);
+    console.log(err.message);
+
+
   }
 };
 
-module.exports = { initAddressModel };
+module.exports = {initAddressModel}

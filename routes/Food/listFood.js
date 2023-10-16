@@ -14,7 +14,7 @@ const getFood = async (req, res) => {
         console.log(req.token.user.id);
         const Food = await initFoodModel();
         const wishlist = await initWishlistModel();
-        const isWishlistedFlag = 0
+        
         let check = await Food.findOne({ where: { Food_id: Food_id, stat: true }, });
 if(!check){
     return send(res, RESPONSE.ERROR, "Food item not found")

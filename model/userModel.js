@@ -4,7 +4,6 @@ const { DataTypes, Sequelize } = require("sequelize");
 const { getConnection } = require("../config/dbConfig");
 const { RESPONSE } = require("../config/global");
 const { send } = require("../config/responseHelper");
-//const { initAddressModel } = require("./addressModel");
 
 const userSchema = {
   id: {
@@ -36,22 +35,20 @@ const userSchema = {
   }
 }
 
+let user = null;
 const initUserModel = async (res) => {
   try {
-   // const address = await initAddressModel()
-    let User = null;
-    if (User) return User;
-
+   if (user) return user;
     const sequelize = await getConnection();
-    User = sequelize.define("User", userSchema, {
+    user = sequelize.define("user", userSchema, {
       freezeTableName: true,
       timestamps: true,
     });
-    // User.belongsTo(address, { foreignKey: 'address' ,targetKey:'address'});
-    
-    await User.sync({ alter: true });
-    return User;
+
+    await user.sync({ alter: true });
+    return user;
   } catch (err) {
+    console.log(err.stack);
     return send(res,RESPONSE.ERROR,err.message)
   }
 };

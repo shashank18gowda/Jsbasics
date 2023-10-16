@@ -26,7 +26,6 @@ const updateFood = async (req, res) => {
         if (F_name) {
             const existingEntryF_name = await Food.findOne({ where: { F_name: F_name } });
 
-
             if (existingEntryF_name) {
                 return send(res, RESPONSE.ALREADY_EXIST);
             }

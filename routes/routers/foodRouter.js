@@ -10,10 +10,10 @@ const {getFood,getFoodCat} = require("../Food/listFood")
 const {updateFood} = require("../Food/updateFood")
 const {searchFood} = require("../Food/searchFood")
 const {deleteFood} = require("../Food/deleteFood")
-const { rating,getRating,getRatingByUser } = require("../CommentRatingWishList/rating")
+const { rating,getRating,getRatingByUser } = require("../CRWC/rating")
 const upload = require("../../middleware/upload");
-const { comment , getComment} = require("../CommentRatingWishList/comment");
-const { addWishList , getwishListByUser} = require("../CommentRatingWishList/wishlist");
+const { comment , getComment} = require("../CRWC/comment");
+const { addWishList , getwishListByUser} = require("../CRWC/wishlist");
 
 router.post('/create',upload.array('image',1),validateToken,checkAdminRole,createFood)
 //router.get('/list',validateToken,checkUserAdmin,getFood)

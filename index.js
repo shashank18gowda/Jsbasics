@@ -31,7 +31,7 @@ sequelize
 
 
 // app.use('/users', require("./routers/userRoute"))
-app.use('/Food', require("./routes/routers/foodRouter"))
+app.use('/adminUser', require("./routes/routers/userAdminRoute"))
 app.use('/Admin', require("./routes/routers/AdminRoute"))
 app.use('/User', require("./routes/routers/UserRoute"))
 

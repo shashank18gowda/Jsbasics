@@ -1,5 +1,7 @@
 
 
+const { RESPONSE } = require("../../config/global");
+const { send } = require("../../config/responseHelper");
 const { initAddressModel } = require("../../model/addressModel");
 const { initUserModel } = require("../../model/userModel");
 
@@ -8,8 +10,6 @@ const getUser = async (req, res) => {
     const address = await initAddressModel();
     const user = await initUserModel();
     const user_id = req.token.user.id;
-console.log(user_id);
-
    const data = await user.findAll({
       include: [{
         model: address,
@@ -27,10 +27,10 @@ console.log(user_id);
         })),
       }));
   
-    return res.status(200).send(formattedData);
+    return send(res,RESPONSE.SUCCESS,formattedData);
   } catch (err) {
     console.log(err.message);
-    return res.status(400).send(err.stack);
+    return send(res,RESPONSE.ERROR,err.stack);
   }
 };
 

@@ -59,6 +59,8 @@ const initFoodModel = async () => {
     return food;
   } catch (err) {
     console.log("sdfsdfsd", err.stack);
+    return send(res, RESPONSE.ERROR,"internal server error");
+
   }
 };
 

@@ -78,14 +78,14 @@ const getFoodCat = async (req, res) => {
         });
 
         if (!check) {
-            return send(res, RESPONSE.ENTRY_NF);
+            return send(res, RESPONSE.ERROR,"Not entries found");
         }
 
         return send(res, RESPONSE.SUCCESS, check);
 
     } catch (err) {
-        console.log("dsfdf", err.stack);
-        return send(res, RESPONSE.ERROR, "jfkffff");
+        console.log( err.stack);
+        return send(res, RESPONSE.ERROR);
     }
 };
 module.exports = { getFood, getFoodCat }

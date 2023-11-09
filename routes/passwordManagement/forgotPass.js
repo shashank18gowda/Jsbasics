@@ -13,7 +13,7 @@ const forgotPassword = async (req, res) => {
     try {
       const User = await initUserModel();
       const otpModel = await initotpModel();
-      const user_id = req.token.user.id
+    //  const user_id = req.token.user.id
       console.log(otpModel);
   
       const user = await User.findOne({ where: { email } });
@@ -47,7 +47,7 @@ const forgotPassword = async (req, res) => {
           resetPasswordExpires = Date.now() + 600000;
           console.log(resetPasswordExpires);
   
-          const existingOTP = await otpModel.findOne({ where: { user_id: user_id } })
+          const existingOTP = await otpModel.findOne({ where: { email: email } })
           if (existingOTP) {
             existingOTP.otp = sentOTP;
             existingOTP.otpExp = resetPasswordExpires;
@@ -55,7 +55,7 @@ const forgotPassword = async (req, res) => {
           } else {
             await otpModel.create({
               otp: sentOTP,
-              user_id: user_id,
+              email: email,
               otpExp: resetPasswordExpires
             });
           }

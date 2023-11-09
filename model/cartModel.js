@@ -29,7 +29,9 @@ const initcartModel = async () => {
         await cart.sync({ alter: true });
         return cart;
     } catch (err) {
-        console.log("oaoao", err.message);
+        console.log( err.message);
+      return send(res, RESPONSE.ERROR,"internal server error");
+
     }
 };
 

@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { getConnection } = require("../config/dbConfig");
-const  {initUserModel}  = require("../model/userModel");
+const { initUserModel } = require("../model/userModel");
+const { RESPONSE } = require("../config/global");
+const { send } = require("../config/responseHelper");
 
 
 
@@ -11,21 +13,20 @@ const addressModel = {
     primaryKey: true,
   },
   address: {
-    type:DataTypes.STRING,
+    type: DataTypes.STRING,
   },
-
-};
-let address  = null;
+}
+let address = null;
 const initAddressModel = async (res) => {
   try {
     if (address) return address;
     const sequelize = await getConnection();
-  
+
     address = sequelize.define("address", addressModel, {
       freezeTableName: true,
     });
     const user = await initUserModel();
-   user.hasMany(address, {
+    user.hasMany(address, {
       as: "addressInfo",
       onDelete: "cascade",
       foreignKey: {
@@ -35,13 +36,14 @@ const initAddressModel = async (res) => {
       targetKey: "id",
     });
 
-     await address.sync({ alter: true });
+    await address.sync({ alter: true });
     return address;
   } catch (err) {
     console.log(err.message);
+    return send(res, RESPONSE.ERROR, "internal server error");
 
 
   }
 };
 
-module.exports = {initAddressModel}
+module.exports = { initAddressModel }

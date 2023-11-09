@@ -17,11 +17,14 @@ const placeOrder = async (req, res) => {
 
         console.log(address_id);
         const getCart = await cart.findAll({ where: { user_id } });
-        //  console.log(getCart.Food_id);
+
         const foodId = getCart.map(entry => entry.Food_id);
         const checkFood = await food.findAll({ where: { Food_id: foodId } });
-        const userAd = await address.findOne({ where: { user_id: user_id, id: address_id } });
         const userDis = await address.findAll({ where: { user_id: user_id } });
+
+
+        const userAd = await address.findOne({ where: { user_id: user_id, id: userDis[address_id - 1].id } });
+
 
         if (!userAd) {
             return send(res, RESPONSE.ERROR, "address not found");
@@ -29,8 +32,10 @@ const placeOrder = async (req, res) => {
         }
         const userAddress = userDis.map((item) => {
             return {
+
                 id: item.id,
-                address: item.address
+                address: item.address,
+
             }
         })
 
@@ -91,22 +96,25 @@ const placeOrder = async (req, res) => {
 const paymentMethod = async (req, res) => {
     try {
         const { paymentMethod } = req.body
-const order = await initorderModel();
-const user_id = req.token.user.id
+        const order = await initorderModel();
+        const user_id = req.token.user.id
         const existingOrder = await order.findOne({ where: { user_id } });
-      
-        if (paymentMethod == 1 ||paymentMethod == 2) {
+
+        if (paymentMethod == 1 || paymentMethod == 2) {
             if (existingOrder) {
+                const currentTime = new Date();
                 existingOrder.mop = paymentMethod;
+                existingOrder.order_status = 1;
+                existingOrder.pending = currentTime;
                 await existingOrder.save();
             } else {
                 await order.create({
                     mop: paymentMethod
                 });
             }
-            return send(res,RESPONSE.SUCCESS,"Payment Method Added")
+            return send(res, RESPONSE.SUCCESS, "Payment Method Added")
         }
-        return send(res,RESPONSE.ERROR,"invalid payment method")
+        return send(res, RESPONSE.ERROR, "invalid payment method")
 
 
     } catch (err) {
@@ -115,5 +123,5 @@ const user_id = req.token.user.id
     }
 }
 
-module.exports = { placeOrder ,paymentMethod}
+module.exports = { placeOrder, paymentMethod }
 

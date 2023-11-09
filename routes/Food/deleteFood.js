@@ -12,7 +12,7 @@ const deleteFood = async (req, res) => {
     const itemToDelete = await schema.findOne({ where: { Food_id: Food_id, stat: true } });
 
     if (!itemToDelete) {
-      return send(res, RESPONSE.ENTRY_NF);
+      return send(res, RESPONSE.ERROR,"Entry not found");
     }
 
     const updatedItem = await schema.update(
@@ -24,10 +24,10 @@ const deleteFood = async (req, res) => {
     );
 
     if (!updatedItem) {
-      return send(res, RESPONSE.ITM_NOT_FOUND);
+      return send(res, RESPONSE.ERROR,"Item not found");
     }
 
-    return send(res, RESPONSE.DATA_DELETED_SUCCESSFULLY);
+    return send(res, RESPONSE.ERROR,"Data deleted successfully");
   } catch (err) {
    console.log(err.stack);
     return send(res, RESPONSE.ERROR, err.stack)

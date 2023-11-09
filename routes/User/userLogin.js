@@ -16,10 +16,10 @@ const loginUser = async (req, res) => {
         
         
         if (!email) {
-            return res.send(RESPONSE.MAN_EMAIL);
+            return res.send(RESPONSE.ERROR,"Email is mandatory");
         }
         if (!password) {
-            return res.send(RESPONSE.MAN_PASSWORD);
+            return res.send(RESPONSE.ERROR,"password is mandatory");
 
         }
         const User = await initUserModel();
@@ -44,7 +44,7 @@ const loginUser = async (req, res) => {
             );
             return send(res, RESPONSE.SUCCESS, {accessToken: accessToken});
                 } else {
-            return send(res,RESPONSE.INVALID_CRED,{});
+            return send(res,RESPONSE.ERROR,"invalid credential");
         }
     }
     catch (err) {

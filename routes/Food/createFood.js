@@ -30,29 +30,29 @@ const createFood = async (req, res) => {
         }
 
         if (!F_name) {
-            return send(res, RESPONSE.F_NAME);
+            return send(res, RESPONSE.ERROR,"first name is required");
         }
         if (!F_price) {
             return send(res, RESPONSE.ERROR,"price required");
         }
         if (!ingredients) {
-            return send(res, RESPONSE.INGREDIENT);
+            return send(res, RESPONSE.ERROR,"ingredient is required");
         }
 
         if (!description) {
-            return send(res, RESPONSE.DESCRIPTION);
+            return send(res, RESPONSE.ERROR,"description is required");
         }
 
         if (!category) {
-            return send(res, RESPONSE.CATEGORY);
+            return send(res, RESPONSE.ERROR,"category is required");
         }
 
         if (!moment(cookTime, `mm:ss`, true).isValid()) {
-            return send(res, RESPONSE.TIME);
+            return send(res, RESPONSE.ERROR,"Cook Time is reqired");
         }
 
         if (existingEntryF_name) {
-            return send(res, RESPONSE.ALREADY_EXIST);
+            return send(res, RESPONSE.ERROR,"Food Name already exist");
         }
 
         for(const file of files) {
@@ -70,7 +70,7 @@ const createFood = async (req, res) => {
             });
         }
 
-        return send(res, RESPONSE.D_INSERT_SUCCESS);
+        return send(res, RESPONSE.SUCCESS,"New food added");
     }catch(err) {
         console.error(err.message);
         return send(res, RESPONSE.ERROR, err.stack);

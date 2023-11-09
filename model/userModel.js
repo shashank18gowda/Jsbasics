@@ -49,7 +49,8 @@ const initUserModel = async (res) => {
     return user;
   } catch (err) {
     console.log(err.stack);
-    return send(res,RESPONSE.ERROR,err.message)
+    return send(res, RESPONSE.ERROR,"internal server error");
+
   }
 };
 

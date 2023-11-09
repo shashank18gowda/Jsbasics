@@ -23,11 +23,11 @@ const registerUser = async (req, res) => {
 
 
         if (!username) {
-            return send(res, RESPONSE.MAN_USERNAME);
+            return send(res, RESPONSE.ERROR,"username is mandatory");
 
         }
         if (!email) {
-            return send(res, RESPONSE.MAN_EMAIL);
+            return send(res, RESPONSE.ERROR,"email is mandatory");
         }
         if (!phNumber) {
             return send(res, RESPONSE.ERROR,"phone is mandatory");
@@ -38,10 +38,10 @@ const registerUser = async (req, res) => {
 
         }
         if (!password) {
-            return send(res, RESPONSE.MAN_PASSWORD);
+            return send(res, RESPONSE.ERROR,"password is mandatory");
         }
         if (!val) {
-            return send(res, RESPONSE.EMAIL_INVALID);
+            return send(res, RESPONSE.ERROR,"email is invalid");
 
         }
         if (!vph) {
@@ -51,7 +51,7 @@ const registerUser = async (req, res) => {
 
         const userAvailable = await User.findOne({ where: { email: email } });
         if (userAvailable) {
-            return send(res, RESPONSE.USER_ALREADY_EXIST);
+            return send(res, RESPONSE.ERROR,"user already exists");
         }
        
         const hashpassword = await bcrypt.hash(password, 10);
@@ -65,7 +65,7 @@ const registerUser = async (req, res) => {
             role
         });
         // return send(res, send(user))
-        return send(res,RESPONSE.U_CREATED_SUCCESS);
+        return send(res,RESPONSE.SUCCESS,"user created successfully");
 
     } catch (err) {
         console.log(err);

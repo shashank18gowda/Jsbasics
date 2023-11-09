@@ -25,6 +25,8 @@ const initWishlistModel = async () => {
         return Wishlist;
     } catch (err) {
         console.log("oaoao", err.message);
+      return send(res, RESPONSE.ERROR,"internal server error");
+
     }
 };
 

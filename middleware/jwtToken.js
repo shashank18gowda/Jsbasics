@@ -9,7 +9,7 @@ const validateToken = (req, res, next) =>{
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
                 
-                return send(res, RESPONSE.ERROR, "Admin Not Authorized");
+                return send(res, RESPONSE.ERROR, "permission is required");
             }
                req.token = decoded;
             next();

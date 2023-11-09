@@ -12,11 +12,10 @@ app.use(bodyParser.json());
 
 const rating = async (req, res) => {
   try {
-    const sequelize = await getConnection();
+
     const Rate = await initrating();
     const Food = await initFoodModel();
 
-    
     const { rating } = req.body;
     const user_id= req.token.user.id;
     const { Food_id } = req.params;
@@ -54,9 +53,7 @@ let existingRating = await Rate.findOne({ where: { Food_id: Food_id,user_id:user
 
 const getRating = async (req, res) => {
   try {
-    const sequelize = await getConnection();
     const Rate = await initrating();
-    const Food = await initFoodModel();
     const { Food_id } = req.params;
 
     const food = await Rate.findOne({ where: { Food_id: Food_id } });
@@ -76,7 +73,7 @@ const getRating = async (req, res) => {
  return send(res, RESPONSE.SUCCESS, { averageRating });
   } catch (error) {
     console.error(error.message);
-    return send(res, RESPONSE.ERROR,{ message: 'Internal server error' });
+    return send(res, RESPONSE.ERROR,'Internal server error');
   }
 };
 
@@ -90,7 +87,7 @@ const getRatingByUser = async (req, res) => {
  return send(res, RESPONSE.SUCCESS, { rating });
   } catch (error) {
     console.error(error.message);
-    return send(res, RESPONSE.ERROR,{ message: 'Internal server error' });
+    return send(res, RESPONSE.ERROR,'Internal server error' );
   }
 };
 module.exports = { rating ,getRating,getRatingByUser }

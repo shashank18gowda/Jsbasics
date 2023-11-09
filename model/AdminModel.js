@@ -41,8 +41,7 @@ const initAdminModel = async (res) => {
       timestamps: true,
     });
 
-    //Admin.hasMany(Food, { foreignKey: 'role' });
-
+ 
     await Admin.sync({ alter: true });
     return Admin;
   } catch (err) {

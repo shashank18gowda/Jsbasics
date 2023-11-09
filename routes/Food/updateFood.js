@@ -27,7 +27,7 @@ const updateFood = async (req, res) => {
             const existingEntryF_name = await Food.findOne({ where: { F_name: F_name } });
 
             if (existingEntryF_name) {
-                return send(res, RESPONSE.ALREADY_EXIST);
+                return send(res, RESPONSE.ERROR,"Food name already exists");
             }
             updateFoodList.F_name = F_name;
         }
@@ -59,7 +59,7 @@ const updateFood = async (req, res) => {
         );
 
         if (!updatedItem) {
-            return send(res, RESPONSE.ITM_NOT_FOUND);
+            return send(res, RESPONSE.ERROR,"Item not found");
         }
 
         if (key) {
@@ -69,7 +69,7 @@ const updateFood = async (req, res) => {
             const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
             if (allowedMimeTypes.includes(newImagePath.mimetype) || newImagePath.length === 0) {
-                return send(res, RESPONSE.INVALID_FILE);
+                return send(res, RESPONSE.ERROR,"invalid file");
             }
             s3Utils.updateS3Image(existingKey, newImagePath, (updatedKey) => {
                 if (updatedKey) {
@@ -80,7 +80,7 @@ const updateFood = async (req, res) => {
             });
         }
 
-        return send(res, RESPONSE.D_UPDATED_SUCCESS);
+        return send(res, RESPONSE.SUCCESS,"Data updated successfully");
 
     } catch (err) {
         console.log(err.stack);

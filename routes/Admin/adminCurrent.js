@@ -7,7 +7,7 @@ const { send } = require("../../config/responseHelper");
 
 
 const currentAdmin = asyncHandler(async (req, res) => {
-    return send(res, RESPONSE.SUCCESS, {Admin: req.admin});
+    return send(res, RESPONSE.SUCCESS);
 
 });
 

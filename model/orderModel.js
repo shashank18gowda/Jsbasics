@@ -14,31 +14,60 @@ const orderSchema = {
     type: new DataTypes.INTEGER(),
     primaryKey: true,
   },
-  
+
   mop: {
     type: new DataTypes.INTEGER(),
     allowNull: true,
   },
 
   food_id: {
-    type:DataTypes.ARRAY(DataTypes.STRING),
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
   },
-  
-  user_id:{
+
+  user_id: {
     type: new DataTypes.INTEGER(),
     allowNull: false,
   },
 
-  totalPrice:{
+  totalPrice: {
     type: new DataTypes.INTEGER(),
     allowNull: false,
   },
-  address_id:{
+  address_id: {
     type: new DataTypes.INTEGER(),
     allowNull: true,
+  },
+  order_status: {
+    type: new DataTypes.INTEGER(),
+    allowNull: true,
+  },
+  pending: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+
+  processing: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+  shipped: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+  dispatch: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+  delivered: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+
+  cancelled: {
+    type: Sequelize.DATE,
+    allowNull: true,
   }
-  
 }
 
 const initorderModel = async (res) => {
@@ -55,8 +84,10 @@ const initorderModel = async (res) => {
     await order.sync({ alter: true });
     return order;
   } catch (err) {
-    return send(res,RESPONSE.ERROR,err.message)
+    console.log(err.stack);
+    return send(res, RESPONSE.ERROR, "internal server error");
+
   }
 };
 
-module.exports = {initorderModel };
+module.exports = { initorderModel };

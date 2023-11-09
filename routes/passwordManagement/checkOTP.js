@@ -6,12 +6,12 @@ const checkOTP = async (req, res) => {
 
     try {
       const otpModel = await initotpModel()
-      const user_id = req.token.user.id
+     
+      const { otp,email } = req.body
   
-      const checkOTP = await otpModel.findOne({ where: { user_id: user_id } })
+      const checkOTP = await otpModel.findOne({ where: { email: email } })
   
-      const { otp } = req.body
-  
+   
   if(!checkOTP){
     return send(res, RESPONSE.ERROR, { message: 'regenerate otp' })
   

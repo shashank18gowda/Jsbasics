@@ -48,7 +48,7 @@ const searchFood = async (req, res) => {
             totalPages: Math.ceil(totalCount / limit)
         };
 
-        return res.status(200).json(response);
+        return send(res, RESPONSE.SUCCESS,response );
     } catch (error) {
         console.log(error.stack)
         return send(res, RESPONSE.ERROR );

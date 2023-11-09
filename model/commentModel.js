@@ -35,6 +35,8 @@ const initComment = async () => {
     return Comment;
   } catch (err) {
     console.log(err.message);
+    return send(res, RESPONSE.ERROR,"internal server error");
+
   }
 };
 

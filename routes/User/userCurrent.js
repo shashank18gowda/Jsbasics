@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 
 require('dotenv').config();
 const { RESPONSE } = require("../../config/global")
-const { initUserModel } = require("../../model/userModel");
 const { send } = require("../../config/responseHelper");
 
 

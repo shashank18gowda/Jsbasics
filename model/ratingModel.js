@@ -38,6 +38,8 @@ const initrating = async () => {
     return Rating;
   } catch (err) {
     console.log(err.message);
+    return send(res, RESPONSE.ERROR,"internal server error");
+
   }
 };
 
